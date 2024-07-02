@@ -1,6 +1,8 @@
-import React from 'react'
-
-const TodoItem = ({ todo, toggleCompleted, deleteTodo }) => {
+import React, { useContext } from 'react'
+import { TodoContext } from '../App'
+const TodoItem = ({ todo }) => {
+    // Peroleh "toggleCompleted" dan "deleteTodo" dari TodoContext
+    const { toggleCompleted, deleteTodo } = useContext(TodoContext)
   const getTodoTitleStyle = () => {
     if (todo.completed === true) {
       return { textDecoration: 'line-through' }
@@ -15,10 +17,11 @@ const TodoItem = ({ todo, toggleCompleted, deleteTodo }) => {
         type="checkbox"
         style={styles.checkbox}
         onChange={() => toggleCompleted(todo.id)}
-        checked={todo.completed}
       />
       <p style={getTodoTitleStyle()}>{todo.title}</p>
-      <button style={styles.button} onClick={() => deleteTodo(todo.id)}>x</button>
+      <button style={styles.button} onClick={() => deleteTodo(todo.id)}>
+        x
+      </button>
     </div>
   )
 }
