@@ -1,14 +1,11 @@
 import React, { useContext } from 'react'
 import { TodoContext } from '../App'
+
 const TodoItem = ({ todo }) => {
-    // Peroleh "toggleCompleted" dan "deleteTodo" dari TodoContext
-    const { toggleCompleted, deleteTodo } = useContext(TodoContext)
+  const { toggleCompleted, deleteTodo, setEditingTodo } = useContext(TodoContext)
+
   const getTodoTitleStyle = () => {
-    if (todo.completed === true) {
-      return { textDecoration: 'line-through' }
-    } else {
-      return { textDecoration: 'none' }
-    }
+    return todo.completed ? { textDecoration: 'line-through' } : { textDecoration: 'none' }
   }
 
   return (
@@ -16,12 +13,12 @@ const TodoItem = ({ todo }) => {
       <input
         type="checkbox"
         style={styles.checkbox}
+        checked={todo.completed}
         onChange={() => toggleCompleted(todo.id)}
       />
       <p style={getTodoTitleStyle()}>{todo.title}</p>
-      <button style={styles.button} onClick={() => deleteTodo(todo.id)}>
-        x
-      </button>
+      <button style={styles.editButton} onClick={() => setEditingTodo(todo)}>Edit</button>
+      <button style={styles.button} onClick={() => deleteTodo(todo.id)}>x</button>
     </div>
   )
 }
@@ -34,6 +31,7 @@ const styles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: '0 20px',
+    marginBottom: '10px',
   },
   checkbox: {
     height: '18px',
@@ -48,6 +46,16 @@ const styles = {
     border: 'none',
     cursor: 'pointer',
     fontSize: '16px',
+  },
+  editButton: {
+    backgroundColor: '#00BB00',
+    color: '#fff',
+    height: '30px',
+    width: '60px',
+    border: 'none',
+    cursor: 'pointer',
+    fontSize: '16px',
+    marginRight: '10px',
   },
 }
 

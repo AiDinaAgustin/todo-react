@@ -3,14 +3,12 @@ import Todos from './components/Todos'
 import TodoForm from './components/TodoForm'
 export const TodoContext = createContext()
 
-
-
 function App() {
   const [todos, setTodos] = useState([
     {
       id: 1,
       title: 'Finish Progate React Course',
-      completed: false,  // Mengganti nilai awal ke true
+      completed: false,
     },
     {
       id: 2,
@@ -23,7 +21,8 @@ function App() {
       completed: false,
     },
   ])
-  console.log(todos)
+
+  const [editingTodo, setEditingTodo] = useState(null)
 
   const toggleCompleted = (todoId) => {
     const updatedTodos = todos.map((todo) => {
@@ -55,11 +54,22 @@ function App() {
     setTodos(updatedTodos)
   }
 
+  const editTodo = (todoId, newTitle) => {
+    const updatedTodos = todos.map((todo) => {
+      if (todo.id === todoId) {
+        todo.title = newTitle
+      }
+      return todo
+    })
+    setTodos(updatedTodos)
+    setEditingTodo(null) // Reset editing todo
+  }
+
   return (
-    <TodoContext.Provider value={{ toggleCompleted, deleteTodo }}>
+    <TodoContext.Provider value={{ toggleCompleted, deleteTodo, setEditingTodo }}>
       <div style={styles.container}>
         <h1 style={styles.title}>My Todo List</h1>
-        <TodoForm addTodo={addTodo} />
+        <TodoForm addTodo={addTodo} editTodo={editTodo} editingTodo={editingTodo} />
         <Todos todos={todos} />
       </div>
     </TodoContext.Provider>

@@ -1,42 +1,45 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
-const TodoForm = ({ addTodo }) => {
-    const [title, setTitle] = useState('')
+const TodoForm = ({ addTodo, editTodo, editingTodo }) => {
+  const [title, setTitle] = useState('')
 
-    const handleSubmit = (event) => {
-        event.preventDefault()
-        addTodo(title)
-        setTitle('') // Reset title-nya
-      }
-    
-      const handleChangeTitle = (event) => {
-        setTitle(event.target.value)
-      }
-  
-  // Periksa apakah function "handleChangeTitle" berfungsi
-  console.log(title)
+  useEffect(() => {
+    if (editingTodo) {
+      setTitle(editingTodo.title)
+    } else {
+      setTitle('')
+    }
+  }, [editingTodo])
 
-    return (
-        <div style={styles.container}>
-      <form
-        onSubmit={(event) => {
-          handleSubmit(event)
-        }}
-      >
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    if (editingTodo) {
+      editTodo(editingTodo.id, title)
+    } else {
+      addTodo(title)
+    }
+    setTitle('') // Reset title
+  }
+
+  const handleChangeTitle = (event) => {
+    setTitle(event.target.value)
+  }
+
+  return (
+    <div style={styles.container}>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
           placeholder="Add your Todo"
           style={styles.formInput}
-          onChange={(event) => {
-            handleChangeTitle(event)
-          }}
-          value={title} // Atur nilai dari input sesuai dengan state  "title"
+          onChange={handleChangeTitle}
+          value={title}
         />
-        <button style={styles.button}>Add Todo</button>
+        <button style={styles.button}>{editingTodo ? 'Update Todo' : 'Add Todo'}</button>
       </form>
     </div>
-    )
-  }
+  )
+}
 
 const styles = {
   container: {
